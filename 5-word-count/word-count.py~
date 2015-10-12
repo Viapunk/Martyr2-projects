@@ -1,0 +1,8 @@
+#Program reads from a file input.txt, then give's an output to a file output.txt
+input_file = open("input.txt", 'r')
+output_file = open("output.txt",'w+')
+
+string = input_file.read()
+array = string.split()
+output_file.write(len.array)
+
