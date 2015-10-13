@@ -55,7 +55,7 @@ class Ui_Form(object):
         self.horizontalLayout.addWidget(self.Button_quit)
         self.verticalLayout.addLayout(self.horizontalLayout)
         
-        self.Editor = QtGui.QTextEdit(Form)
+        self.Editor = QtGui.QPlainTextEdit(Form)
         self.Editor.setObjectName(_fromUtf8("Editor"))
         
         self.verticalLayout.addWidget(self.Editor)
@@ -64,6 +64,7 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
         self.Button_open.clicked.connect(self.OpenTextFile)
+        self.Button_quit.clicked.connect(self.Close_Application)
     def retranslateUi(self, Form):
         Form.setWindowTitle(_translate("Form", "Form", None))
         self.Button_open.setText(_translate("Form", "Open", None))
@@ -75,13 +76,22 @@ class Ui_Form(object):
         dialog = QtGui.QFileDialog()
         dialog.setWindowTitle("Choose a file to open")
         dialog.setFileMode(QtGui.QFileDialog.ExistingFile)
-        dialog.setNameFilter("Text (*.txt)")
+        dialog.setNameFilter("Text (*.txt);; All files (*.*)")
         dialog.setViewMode(QtGui.QFileDialog.Detail)
         filename = QtCore.QStringList()
         if(dialog.exec_()):
-            filename = dialog.selectFile()
-
-
+            filename = dialog.selectedFiles()
+        plain_text = open(filename[0]).read()
+        self.Editor.setPlainText(plain_text)
+        
+    
+    def Close_Application(self):
+        choice = QtGui.QMessageBox.question(Form ,'Quit application','Do you want to quit?', QtGui.QMessageBox.Yes
+                | QtGui.QMessageBox.No)
+        if (choice == QtGui.QMessageBox.Yes):
+            QtGui.QApplication.quit()
+        else:
+            pass
 
 if __name__ == "__main__":
     import sys
@@ -91,4 +101,3 @@ if __name__ == "__main__":
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
-
