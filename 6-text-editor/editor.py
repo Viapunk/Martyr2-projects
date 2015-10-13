@@ -62,9 +62,13 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        
+        self.file_path = None
 
         self.Button_open.clicked.connect(self.OpenTextFile)
+        self.Button_save.clicked.connect(self.SaveTextFile)
         self.Button_quit.clicked.connect(self.Close_Application)
+ 
     def retranslateUi(self, Form):
         Form.setWindowTitle(_translate("Form", "Form", None))
         self.Button_open.setText(_translate("Form", "Open", None))
@@ -80,11 +84,16 @@ class Ui_Form(object):
         dialog.setViewMode(QtGui.QFileDialog.Detail)
         filename = QtCore.QStringList()
         if(dialog.exec_()):
-            filename = dialog.selectedFiles()
-        plain_text = open(filename[0]).read()
-        self.Editor.setPlainText(plain_text)
-        
+            file_name = dialog.selectedFiles()
+        plain_text = open(file_name[0]).read()
+        self.Editor.setPlainText(plain_text)        
+        self.file_path = str(file_name[0])
     
+    def SaveTextFile(self):
+        file = open(self.file_path,'w')
+        file.write(self.Editor.toPlainText())
+         
+
     def Close_Application(self):
         choice = QtGui.QMessageBox.question(Form ,'Quit application','Do you want to quit?', QtGui.QMessageBox.Yes
                 | QtGui.QMessageBox.No)
